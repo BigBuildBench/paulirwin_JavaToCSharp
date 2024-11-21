@@ -1,0 +1,200 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:JavaToCSharpGui.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="JavaToCSharpGui.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/JavaToCSharpIcon.ico"
+        Title="Java to C# Converter">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+			to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+    <Grid>
+        <Grid RowDefinitions="*, Auto" Margin="10">
+            <Grid Grid.Row="0" RowDefinitions="Auto,Auto,*">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                    <TextBlock FontWeight="Bold" FontSize="16">Java to C#</TextBlock>
+                    <StackPanel Grid.Column="1"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Right"
+                                Spacing="10"
+                                Orientation="Horizontal">
+                        <ToggleSwitch
+                            Padding="4"
+                            IsCheckedChanged="ToggleButton_OnIsCheckedChanged"
+                            ToolTip.Tip="Toggle Dark/Light Mode"
+                            AutomationProperties.Name="Toggle Dark/Light Mode"
+                            Theme="{DynamicResource ButtonToggleSwitch}">
+                            <ToggleSwitch.OnContent>
+                                <i:Icon Value="fa-moon" />
+                            </ToggleSwitch.OnContent>
+                            <ToggleSwitch.OffContent>
+                                <i:Icon Value="fa-sun" />
+                            </ToggleSwitch.OffContent>
+                        </ToggleSwitch>
+                        <Button i:Attached.Icon="fa-info"
+                                ToolTip.Tip="About"
+                                AutomationProperties.Name="About"
+                                Command="{CompiledBinding OpenAboutCommand}" />
+                        <Button i:Attached.Icon="fa-brands fa-github"
+                                ToolTip.Tip="Fork me on GitHub"
+                                AutomationProperties.Name="Fork me on GitHub"
+                                Command="{CompiledBinding ForkMeOnGitHubCommand}" />
+                        <Button i:Attached.Icon="fa-gear"
+                                ToolTip.Tip="Settings"
+                                AutomationProperties.Name="Settings"
+                                Command="{CompiledBinding OpenSettingsCommand}" />
+                    </StackPanel>
+                </Grid>
+                <TabControl Grid.Row="2" Margin="0,10,0,0">
+                    <TabItem Header="Single File">
+                        <Grid ColumnDefinitions="*,Auto,*">
+                            <Grid RowDefinitions="Auto,Auto,*">
+                                <TextBlock Margin="10">Java Source Code Input:</TextBlock>
+                                <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                                    <TextBlock Margin="10,5,10,5" VerticalAlignment="Center">File:</TextBlock>
+                                    <TextBox Name="OpenPath"
+                                             Grid.Column="1"
+                                             Margin="5"
+                                             Text="{CompiledBinding OpenPath}"
+                                             AutomationProperties.Name="File Path" />
+                                    <Button Grid.Column="2" Margin="10,5,10,5"
+                                            AutomationProperties.Name="Open File"
+                                            ToolTip.Tip="Open File"
+                                            Command="{CompiledBinding OpenFileDialogCommand}"
+                                            Name="OpenFileDialog">
+                                        <i:Icon Value="fa-folder-open" />
+                                    </Button>
+                                </Grid>
+                                <AvaloniaEdit:TextEditor
+                                    Name="JavaTextEditor"
+                                    Document="{CompiledBinding JavaText}"
+                                    Grid.Row="2"
+                                    Margin="10"
+                                    AutomationProperties.Name="Java Source Code Input"
+                                    ShowLineNumbers="True"
+                                    FontFamily="{CompiledBinding MonospaceFontFamily}"
+                                    />
+                            </Grid>
+                            <Button Grid.Column="1" Name="Convert" IsEnabled="{CompiledBinding IsConvertEnabled}"
+                                    Command="{CompiledBinding ConvertCommand}" Height="35" Margin="10">
+                                Convert!
+                            </Button>
+                            <Grid Grid.Column="2" RowDefinitions="Auto,Auto,*">
+                                <TextBlock Margin="10">C# Output:</TextBlock>
+                                <StackPanel Grid.Row="1"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            Spacing="10"
+                                            Margin="5">
+                                    <Button Name="CopyOutput"
+                                            ToolTip.Tip="Copy to Clipboard"
+                                            AutomationProperties.Name="Copy to Clipboard"
+                                            Command="{CompiledBinding CopyOutputCommand}">
+                                        <i:Icon Value="fa-copy" />
+                                    </Button>
+                                    <Button Name="SaveOutput"
+                                            ToolTip.Tip="Save to File"
+                                            AutomationProperties.Name="Save to File"
+                                            Command="{CompiledBinding SaveOutputCommand}">
+                                        <i:Icon Value="fa-save" />
+                                    </Button>
+                                </StackPanel>
+                                <AvaloniaEdit:TextEditor
+                                    Name="CSharpTextEditor"
+                                    Document="{CompiledBinding CSharpText}"
+                                    Grid.Row="2"
+                                    Margin="10"
+                                    AutomationProperties.Name="C# Output"
+                                    ShowLineNumbers="True"
+                                    FontFamily="{CompiledBinding MonospaceFontFamily}"
+                                    />
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Folder">
+                        <Grid ColumnDefinitions="*,Auto,*">
+                            <Grid RowDefinitions="Auto,Auto,*">
+                                <TextBlock Margin="10">Java Source Code Folder Input:</TextBlock>
+                                <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
+                                    <TextBlock Margin="10,5,10,5">Folder:</TextBlock>
+                                    <TextBox Name="OpenFolderPath"
+                                             Grid.Column="1"
+                                             Margin="5"
+                                             Text="{CompiledBinding OpenFolderPath}"
+                                             AutomationProperties.Name="Folder Path" />
+                                    <Button Grid.Column="2" Margin="10,5,10,5"
+                                            AutomationProperties.Name="Open Folder"
+                                            ToolTip.Tip="Open Folder"
+                                            Command="{CompiledBinding OpenFolderDialogCommand}"
+                                            Name="OpenFolderDialog">
+                                        <i:Icon Value="fa-folder-open" />
+                                    </Button>
+                                </Grid>
+                                <ListBox Name="JavaFiles"
+                                         ItemsSource="{CompiledBinding FolderInputFiles}"
+                                         Grid.Row="2"
+                                         Margin="10"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                         ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                         AutomationProperties.Name="Java Source Code Folder Input"
+                                         FontFamily="{CompiledBinding MonospaceFontFamily}"
+                                          />
+                            </Grid>
+                            <Button Grid.Column="1" Name="ConvertFolder"
+                                    IsEnabled="{CompiledBinding IsConvertEnabled}"
+                                    Command="{CompiledBinding FolderConvertCommand}"
+                                    Height="35" Margin="10">
+                                Convert!
+                            </Button>
+                            <Grid Grid.Column="2" RowDefinitions="Auto,Auto,*">
+                                <TextBlock Margin="10">C# Output Paths:</TextBlock>
+                                <StackPanel Grid.Row="1"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            Margin="5">
+                                </StackPanel>
+                                <ListBox Name="CSharpFiles"
+                                         ItemsSource="{CompiledBinding FolderOutputFiles}"
+                                         Grid.Row="2"
+                                         Margin="10"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                         ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                         AutomationProperties.Name="C# Output Paths"
+                                         FontFamily="{CompiledBinding MonospaceFontFamily}"
+                                          />
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+            <!-- StatusBar -->
+            <DockPanel Grid.Row="1">
+                <TextBlock Name="ConversionStateLabel" Text="{CompiledBinding ConversionStateLabel}" Margin="10" />
+            </DockPanel>
+        </Grid>
+        <!-- MessageBox -->
+        <Border Background="DarkGray" IsVisible="{CompiledBinding IsMessageShown}" Opacity="0.5" />
+        <WrapPanel Opacity="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   IsVisible="{CompiledBinding IsMessageShown}">
+            <Border BorderBrush="Black" BorderThickness="2">
+                <Grid MinWidth="100" RowDefinitions="Auto,*,Auto" Background="{StaticResource WindowDefaultBackground}">
+                    <Label Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"
+                           Content="{CompiledBinding MessageTitle}" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" TextWrapping="Wrap"
+                               Grid.Row="1" Text="{CompiledBinding Message}" />
+                    <Button Content="OK" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Grid.Row="2" Command="{CompiledBinding ClearMessageCommand}" />
+                </Grid>
+            </Border>
+        </WrapPanel>
+    </Grid>
+</Window>

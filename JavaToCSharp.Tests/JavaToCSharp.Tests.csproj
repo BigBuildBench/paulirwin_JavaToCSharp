@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <IkvmReference Include="../Lib/javaparser-core-3.25.4.jar" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\*.java" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

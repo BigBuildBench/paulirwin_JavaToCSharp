@@ -1,0 +1,47 @@
+name: .NET Build
+
+on: 
+  push: 
+    branches: 
+      - master
+  pull_request:
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.x
+    - name: Build JavaToCSharp
+      run: dotnet build ./JavaToCSharp/JavaToCSharp.csproj --configuration Release
+
+    - name: Test JavaToCSharp.Tests
+      run: dotnet test ./JavaToCSharp.Tests/JavaToCSharp.Tests.csproj --configuration Release
+
+    - name: Build JavaToCSharpCli
+      run: dotnet build ./JavaToCSharpCli/JavaToCSharpCli.csproj --configuration Release
+
+    - name: Build JavaToCSharpGui
+      run: dotnet build ./JavaToCSharpGui/JavaToCSharpGui.csproj --configuration Release
+  linux-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.x
+    - name: Build JavaToCSharp
+      run: dotnet build ./JavaToCSharp/JavaToCSharp.csproj --configuration Release
+
+    - name: Test JavaToCSharp.Tests
+      run: dotnet test ./JavaToCSharp.Tests/JavaToCSharp.Tests.csproj --configuration Release
+
+    - name: Build JavaToCSharpCli
+      run: dotnet build ./JavaToCSharpCli/JavaToCSharpCli.csproj --configuration Release
+
+    - name: Build JavaToCSharpGui
+      run: dotnet build ./JavaToCSharpGui/JavaToCSharpGui.csproj --configuration Release
